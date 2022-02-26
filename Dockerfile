@@ -6,5 +6,7 @@ FROM caddy:2-alpine
 
 MAINTAINER Jared Rhine <jared@wordzoo.com>
 
+RUN mkdir -p /var/log/caddy
+
 COPY caddy.conf /etc/caddy/Caddyfile
 COPY site/ /srv

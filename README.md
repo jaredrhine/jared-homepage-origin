@@ -4,7 +4,7 @@ Repository URL: https://github.com/jaredrhine/jared-homepage-origin
 
 Author: Jared Rhine <<jared@wordzoo.com>>
 
-Keywords: fly.io, Caddy, static site, wordzoo.com
+Keywords: fly.io, Caddy, Docker, static site, wordzoo.com
 
 ## Purpose
 
