@@ -1,4 +1,4 @@
-# Docker container to serve as HTTP apex for wordzoo.com
+# Docker container to serve up jared.wordzoo.com static content
 #
 # https://github.com/jaredrhine/wordzoo-web-apex-wrapper/tree/main/Dockerfile
 
@@ -8,5 +8,5 @@ MAINTAINER Jared Rhine <jared@wordzoo.com>
 
 RUN mkdir -p /var/log/caddy
 
-COPY caddy.conf /etc/caddy/Caddyfile
-COPY site/ /srv
+COPY --chown=root:root caddy.conf /etc/caddy/Caddyfile
+COPY --chown=root:root site/ /srv

@@ -5,8 +5,12 @@
 
 set -xe
 
+cd /home/jared/work/home/jared-homepage-vue/homeapp
+npm run build
+
 cd /home/jared/work/home/jared-homepage-origin
 rm -rf site
 mkdir site
 cp -a /home/jared/work/home/jared-homepage-vue/homeapp/dist/* site/
+
 flyctl deploy
