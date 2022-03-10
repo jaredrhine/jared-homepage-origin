@@ -1,16 +1,36 @@
 #!/bin/bash
 
-# This is the cheap-and-easy way to handle the inclusion of files
-# from outside the Docker build context. That is, copy them here.
-
 set -xe
+
+# Rerun the build of the web app
 
 cd /home/jared/work/home/jared-homepage-vue/homeapp
 npm run build
+
+# Refresh the local copy of the static file build, since Dockerfile
+# can't copy from outside the build context. This is the
+# cheap-and-easy way to handle that issue, by copying them here.
 
 cd /home/jared/work/home/jared-homepage-origin
 rm -rf site
 mkdir site
 cp -a /home/jared/work/home/jared-homepage-vue/homeapp/dist/* site/
 
+# Using fly.io docker-container hosting, see fly.toml for details
+
 flyctl deploy
+
+# Purge the CDN cache, since we've been serving with long-lived HTTP caching headers (TODO to tighten the rollover/refresh)
+
+curl https://api.keycdn.com/zones/purge/${KEYCDN_ZONE_ID}.json -u ${KEYCDN_API_KEY}:
+
+# Warm up the CDN cache
+
+sleep 10
+
+curl -v https://jared.wordzoo.com/
+curl -v https://jared.wordzoo.com/id
+curl -v https://jared.wordzoo.com/resume
+curl -v https://jared.wordzoo.com/tech-stack
+
+
