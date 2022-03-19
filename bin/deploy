@@ -28,9 +28,9 @@ curl https://api.keycdn.com/zones/purge/${KEYCDN_ZONE_ID}.json -u ${KEYCDN_API_K
 
 sleep 10
 
-curl -v https://jared.wordzoo.com/
-curl -v https://jared.wordzoo.com/id
-curl -v https://jared.wordzoo.com/resume
-curl -v https://jared.wordzoo.com/tech-stack
+curl -sS https://jared.wordzoo.com/
+curl -sS https://jared.wordzoo.com/id
+curl -sS https://jared.wordzoo.com/resume
+curl -sS https://jared.wordzoo.com/tech-stack
 
 
