@@ -2,6 +2,11 @@
 
 set -xe
 
+SERVICE=jared-homepage-origin
+PORT=8998
+VERSION=v21
+TARBALL=$SERVICE.$VERSION.tar
+
 # Rerun the build of the web app
 
 cd /home/jared/work/home/jared-homepage-vue/homeapp
@@ -16,21 +21,20 @@ rm -rf site
 mkdir site
 cp -a /home/jared/work/home/jared-homepage-vue/homeapp/dist/* site/
 
-# Using fly.io docker-container hosting, see fly.toml for details
+# Build docker container into a file
 
-flyctl deploy
+docker buildx build -t $SERVICE:$VERSION .
+docker save -o $TARBALL $SERVICE:$VERSION
 
-# Purge the CDN cache, since we've been serving with long-lived HTTP caching headers (TODO to tighten the rollover/refresh)
+# Load the image
 
-curl https://api.keycdn.com/zones/purge/${KEYCDN_ZONE_ID}.json -u ${KEYCDN_API_KEY}:
+docker -H ssh://mongoose image load -i $TARBALL
 
-# Warm up the CDN cache
+# Create and start the container
 
-sleep 10
+CONTAINER=$(docker -H ssh://mongoose container create --name $SERVICE -p $PORT:80 $SERVICE:$VERSION)
+docker -H ssh://mongoose start $CONTAINER
 
-curl -sS https://jared.wordzoo.com/
-curl -sS https://jared.wordzoo.com/id
-curl -sS https://jared.wordzoo.com/resume
-curl -sS https://jared.wordzoo.com/tech-stack
+# Remove the docker build artifact
 
-
+rm -f $TARBALL

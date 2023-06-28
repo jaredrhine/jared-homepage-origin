@@ -1,35 +1,32 @@
-# fly.toml file generated for jared-homepage-origin on 2022-02-25T17:51:50-08:00
+# fly.toml app configuration file generated for jared-homepage-origin on 2023-06-06T12:15:41-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "jared-homepage-origin"
-
+primary_region = "sjc"
 kill_signal = "SIGINT"
-kill_timeout = 20
-processes = []
-
-[env]
+kill_timeout = "20s"
 
 [[services]]
-  http_checks = []
+  protocol = "tcp"
   internal_port = 80
   processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
 
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
   [services.concurrency]
+    type = "connections"
     hard_limit = 25
     soft_limit = 20
-    type = "connections"
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
 
   [[services.tcp_checks]]
-    grace_period = "1s"
     interval = "15s"
-    restart_limit = 0
     timeout = "2s"
+    grace_period = "1s"
+    restart_limit = 0
